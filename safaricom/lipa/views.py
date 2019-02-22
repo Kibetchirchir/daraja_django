@@ -1,26 +1,24 @@
-import requests
-from requests.auth import HTTPBasicAuth
-import os
 from rest_framework import generics, request
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Transaction
 from .serialiser import TransactionSerializer
+from rest_framework.decorators import api_view
 
 
-class Auth:
-    def __init__(self):
-        pass
+class LipaMpesa(APIView):
+    def get(self, request, format=None):
+        queryset = Transaction.objects.all()
+        serializer_class = TransactionSerializer
+        return Response(serializer_class.data)
 
-    def auth(self):
-        consumer_key = os.getenv("consumer_key")
-        consumer_secret = os.getenv("consumer_secret")
-        api_URL = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
+    def post(self, request, format=None):
+        request.data["name"] = "Kelvin Chirchir"
+        serializer = TransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED,)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        r = requests.get(api_URL, auth=HTTPBasicAuth(consumer_key, consumer_secret))
 
-        return r
-
-
-class LipaMpesa(generics.ListCreateAPIView):
-    print(request)
-    queryset = Transaction.objects.all()
-    serializer_class = TransactionSerializer
