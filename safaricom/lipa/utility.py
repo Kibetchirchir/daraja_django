@@ -40,7 +40,6 @@ class Auth:
         consumer_key = os.getenv("consumer_key")
         consumer_secret = os.getenv("consumer_secret")
         api_url = "https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials"
-
         request = requests.get(api_url, auth=HTTPBasicAuth(consumer_key, consumer_secret))
 
         access_token = request.text
@@ -48,5 +47,5 @@ class Auth:
 
 
 class Password:
-    def password(self, pay_bill_no, pass_key):
+    def password(self):
         pass

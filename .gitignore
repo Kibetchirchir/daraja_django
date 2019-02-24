@@ -15,3 +15,4 @@ build/
 tests/report/
 .idea/
 .env
+db.sqlite3
