@@ -23,6 +23,7 @@ class LipaMpesa(APIView):
         acc_reference = request.data["acc_reference"]
         push = StkPush()
         push_result=push.stk_request(phone, amount, acc_reference)
+        print(push_result)
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
