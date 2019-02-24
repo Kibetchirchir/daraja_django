@@ -1,10 +1,11 @@
-from rest_framework import generics, request
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Transaction
 from .serialiser import TransactionSerializer
-from rest_framework.decorators import api_view
+from .utility import StkPush, Auth
+import json
+import datetime
 
 
 class LipaMpesa(APIView):
@@ -15,6 +16,11 @@ class LipaMpesa(APIView):
 
     def post(self, request, format=None):
         request.data["name"] = "Kelvin Chirchir"
+        phone = request.data["phone_number"]
+        amount = request.data["amount"]
+        acc_reference = request.data["acc_reference"]
+        push = StkPush()
+        push_result=push.stk_request(phone, amount, acc_reference)
         serializer = TransactionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
